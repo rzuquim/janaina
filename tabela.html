@@ -1,0 +1,79 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Espaçamento Tabela</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+
+<body>
+    <table id="grid">
+    </table>
+
+    <script src="script/grid.js"></script>
+    <script src="script/snake.js"></script>
+    <script src="script/food.js"></script>
+    <script src="script/controls.js"></script>
+
+    <script>
+        // enquanto cobra não bateu na parede
+        // -- printGrid
+        // -- printSnake
+        // -- printFood
+        // -- se a cobra encostou na comida
+        //     - aumenta um link da cobra
+        // -- avançar a cobra uma posição na direção que o jogador mandou 
+        let grid = {
+            rowsMax: 10, // TODO: 22
+            colsMax: 10, // TODO: 11
+        }
+
+        let snake = {
+            head: { row: 2, col: 4 },
+            tail: [{ row: 3, col: 4 }, { row: 4, col: 4 }, { row: 5, col: 4 }, { row: 6, col: 4 }],
+            direction: { row: -1, col: 0 },
+            nextDirection: { row: -1, col: 0 },
+        }
+
+        let food = generateFood(grid, snake)
+        let colors = { head: 'red', tail: 'green' }
+
+        function moveSnakeAndRepaintWorld() {
+            // NOTE: essa avalicao acontece aqui para evitar o bug hadouken
+            if (isValidMovement(snake.direction, snake.nextDirection)) {
+                snake.direction = snake.nextDirection
+            }
+
+            let lastTailLink = snake.tail[snake.tail.length - 1]
+            let photoLastTailLink = {
+                row: lastTailLink.row,
+                col: lastTailLink.col
+            }
+            moveSnake(snake)
+            if (ateFood(snake.head, food)) {
+                console.log('yumi is a party in my tummy')
+                food = generateFood(grid, snake)
+                growSnake(snake, photoLastTailLink)
+            }
+
+            if (!isGameOver(grid, snake)) {
+                // TODO: applyUserControl()
+                repaintWorld(grid, snake, food)
+                return
+            }
+
+            clearInterval(intervalId)
+            // TODO: pintar cobra de cinza
+            let playAgain = confirm("Game over! Want to play again?")
+            
+            if (playAgain) {
+                location.replace(location.href) // refresh page
+            }
+        }
+
+        bindControls(snake)
+        repaintWorld(grid, snake, food)
+        let intervalId = setInterval(moveSnakeAndRepaintWorld, 500)
+    </script>
+</body>
