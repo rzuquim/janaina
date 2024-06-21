@@ -16,7 +16,7 @@ function paintGrid(grid) {
 
 function repaintWorld(grid, snake, food) {
     paintGrid(grid)
-    paint(food, 'magenta')
+    paint(food, 'green')
     paintSnake(snake, colors)
 }
 
