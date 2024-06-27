@@ -1,19 +1,20 @@
 function moveSnake(snake) {
-    let leader = { row: snake.head.row, col: snake.head.col }
-    let nextLeader = undefined
+    for (let i = snake.tail.length - 1; i >= 0; i--) {
+        let tail = snake.tail[i];
+        if (i == 0) {
+            tail.row = snake.head.row;
+            tail.col = snake.head.col;
+            break;
+        }
+
+        let nextTail = snake.tail[i - 1];
+
+        tail.row = nextTail.row;
+        tail.col = nextTail.col;
+    }
 
     snake.head.row += snake.direction.row
     snake.head.col += snake.direction.col
-
-    for (let i = 0; i < snake.tail.length; i++) {
-        let follower = snake.tail[i]
-        nextLeader =  { row: follower.row, col: follower.col }
-
-        follower.row = leader.row
-        follower.col = leader.col
-
-        leader = nextLeader
-    }
 }
 
 function paintSnake(snake, colors) {
